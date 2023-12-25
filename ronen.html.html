@@ -1,0 +1,438 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HarveyMed Exam Finder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="examFinderBox">
+    <h1>HarveyMed Exam Finder</h1>
+
+    <label>Select Year</label>
+    <select id="selectYear">
+      <option value="defualt" selected>Select the exam year</option>
+      <option value="1">1st Year</option>
+      <option value="2">2nd Year</option>
+      <option value="3">3rd Year</option>
+      <option value="4">4th Year</option>
+      <option value="5">5th Year</option>
+      <option value="6">6th Year</option>
+    </select>
+
+    <label>Select Course</label>
+    <select id="selectCourse"></select>
+    <button onclick="showCourseDetails()">Course Details</button>
+    
+    <label>Exam Sitting</label>
+    <select id="examSitting">
+      <option value="default" selected>Select sitting</option>
+      <option value="1st">1st Semester Exams</option>
+      <option value="2nd">2nd Semester Exams</option>
+      <option value="summer">Summer Re-takes</option>
+      <option value="fall">Fall Re-takes</option>
+      <option value="winter">Winter Re-takes</option>
+    </select>
+
+    <label>Select sitting Year</label>
+    <select id="selectSittingYear"></select>
+
+    
+    <div id="buttonsContainer">
+      <button id="findExamsButton" onclick="findExams()">Find Exams</button>
+      <button id="resetButton" onclick="resetForm()">Reset</button>
+    </div>
+
+    <div id="courseDetails">
+      <h2>Course Details</h2>
+      <p id="courseDetailsText"></p>
+    </div>
+
+    <div id="examDetails">
+      <h2>Exam Details</h2>
+      <table id="examDetailsTable"></table>
+    </div>
+
+    <p class="bottom-text">Product of HarveyMed - by students, for students</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+  <input id="startDate" type="date" name="start" value="2023-12-01"/>
+        <input id='endDate' type="date" name="end" value="2023-12-02"/> start - end date:
+        <div><input id="department" type="text" name="Department" value="10006"/> Department </div>
+        <div><input id="studio" type="text" name="Studio" value="10046"/> Course studio </div>
+        <di><input id="activity" type="text" name="Activity" /> Activity </div>
+    
+    <div><button onclick="loadTable('')">Submit</button></div>
+
+	<div style="width:90%; margin: auto;">
+       <table id="exams" class="row-border table-hover stripe table-striped" style="width:100%;" ></table>
+  </div>body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+}
+
+#examFinderBox {
+  width: 400px;
+  padding: 20px;
+  margin: 50px auto;
+  background-color: #b0c4de; /* Gray-blue textured background */
+  border: 1px solid #a9c8e8;
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #333;
+}
+
+select, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+#courseDetails, #examDetails {
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+#courseDetails h2, #examDetails h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+#buttonsContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#findExamsButton, #resetButton {
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#resetButton {
+  background-color: #add8e6; /* Light blue */
+  color: #333;
+}
+
+#findExamsButton {
+  background-color: #4caf50; /* Green */
+  color: #fff;
+}
+
+#findExamsButton:hover, #resetButton:hover {
+  background-color: #87ceeb; /* Lighter blue on hover for showData and reset */
+}
+
+#resetButton {
+  padding: 6px 10px; /* Adjusted padding for a smaller button */
+  background-color: #ff5a5a; /* Red */
+  color: #fff;
+}
+
+.bottom-text {
+  text-align: center;
+  margin-top: 20px;
+}
+a, a:hover, a:active, a:focus {
+        cursor: pointer  !important;
+        outline: none  !important;
+        box-shadow: none !important;
+      }
+
+      td:nth-child(4), ul { height: 30px; 
+
+        font-weight: 510; 
+      }
+      tr {
+        
+        font-size: 14.4px;
+        line-height: 20.8833px;
+        font-weight: 400; 
+      }
+      #exams {
+        /* border: 1px solid #999 !important; */
+        --dt-row-stripe: 80, 80, 80;
+        --dt-row-hover: 0, 0, 0;
+
+      }document.addEventListener("DOMContentLoaded", function () {
+  populateYearDropdown();
+  populateExamYearDropdown();
+
+  document.getElementById("selectYear").addEventListener("change", function () {
+    populateCourseDropdown();
+  });
+
+  document.getElementById("resetButton").addEventListener("click", function () {
+    resetForm();
+  });
+
+  document.getElementById("findExamsButton").addEventListener("click", function () {
+    findExams();
+  });
+
+  document.getElementById("selectCourse").addEventListener("change", function () {
+    hideCourseDetails();
+  });
+});
+
+function populateYearDropdown() {
+  const selectYear = document.getElementById("selectYear");
+
+}
+
+function populateExamYearDropdown() {
+  const selectExamYear = document.getElementById("selectExamYear");
+  const currentYear = new Date().getFullYear();
+
+  for (let i = 0; i < 2; i++) {
+    const option = document.createElement("option");
+    const year = currentYear + i;
+    option.value = year.toString();
+    option.text = year.toString();
+    selectSittingYear.add(option);
+  }
+}
+
+function populateCourseDropdown() {
+  // Hide course details when a new course is selected
+  hideCourseDetails();
+  
+  const selectCourse = document.getElementById("selectCourse");
+  const selectedYear = document.getElementById("selectYear").value;
+  
+    // Clear existing options
+  selectCourse.innerHTML = '';
+  
+  // Add default option
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "default";
+  defaultOption.text = "Choose Course";
+  defaultOption.selected = true;
+  selectCourse.add(defaultOption)
+
+  // Manually enter courses for each year
+  const coursesByYear = {
+    1: [
+      { name: 'BASIC SCIENCE', number: '506516', code: '13190', modules: ['Chemistry', 'Physics'] },
+      { name: 'DETERMINANTS OF HEALTH', number: '501883', code: '11126', modules: ['none'] },
+      { name: 'LIVING MOLECULES', number: '501871', code: '11123', modules: ['Biochemistry', 'Biology and genetics'] },
+      { name: 'SCIENTIFIC FOUNDATIONS OF MEDICINE', number: '501891', code: '11763', modules: ['History of medicine', 'Statistics'] },
+      { name: 'STRUCTURE OF THE BODY', number: '505136', code: '12854', modules: ['Cytology', 'Histology', 'Embryology', 'Human anatomy A', 'Human anatomy B'] },
+      // Add more courses for 1st year
+    ],
+    2: [
+      { name: 'BIOLOGY OF DISEASE', number: '501854', code: '10635', modules: ['Immunology', 'Pathology', 'Pathophysiology'] },
+      { name: 'ETHICS AND SOCIETY', number: '506533', code: '17262', modules: ['none'] },
+      { name: 'FUNCTIONS OF THE BODY', number: '501709', code: '9685', modules: ['none'] },
+      { name: 'LABORATORY MEDICINE', number: '506497', code: '12860', modules: ['none'] },
+      { name: 'MICROBIOLOGY', number: '508276', code: '18875', modules: ['none'] },
+      // Add courses for 2nd year
+    ],
+    3: [
+      { name: 'CLINICAL FOUNDATIONS', number: '506556', code: '18865', modules: ['Medical semaiotics', 'Instrumental semiotics', 'General surgery (3rd year)'] },
+      { name: 'DRUG DISCOVERY AND ACTIONS', number: '506508', code: '13182', modules: ['none'] },
+      { name: 'BLOOD DISEASES', number: '508273', code: '18872', modules: ['none'] },
+      { name: 'DISEASE CONTROL AND ERADICATION', number: '508272', code: '9501', modules: ['Infectious disease', 'Epidemiology'] },
+      { name: 'SYSTEMIC PATHOLOGY', number: '506556', code: '18865', modules: ['none'] },
+      { name: 'DISEASE OF THE ENDOCRINE SYSTEM AND METABOLISM', number: '508272', code: '18871', modules: ['Endocrinology and Metabolic disesae', 'Endocrine surgery'] },
+      // Add courses for 3rd year
+    ],
+    4: [
+      { name: 'CARDIOVASCULAR DISEASES', number: '506546', code: '18484', modules: ['Cardiology', 'Vascular surgery', 'Cardiac surgery'] },
+      { name: 'GI AND URINARY TRACTS', number: '501854', code: '10635', modules: ['Urology and Nephrology', 'Gastroenterology, GI surgery, and Nutrition' ] },
+      { name: 'NEUROLOGICAL AND PSYCHIATRIC DISEASES', number: '501898', code: '11770', modules: ['Psychiatry', 'Neurology', 'Neurosurgery', 'Psychological medicine'] },
+      { name: 'RESPIRATORY DISEASES', number: '506496', code: '12859', modules: ['Respiratory disease', 'Thoracic surgery'] },
+      { name: 'SENSE SYSTEM DISEASES', number: '506544', code: '17799', modules: ['Audiology', 'Maxio-facial surgery', 'ENT', 'Ophtalmology'] },
+      { name: 'SOFT TISSUE DISEASES', number: '510069', code: '19923', modules: ['Clinical immunology', 'Dermatology', 'Rheumatology'] },
+      // Add courses for 4th year
+    ],
+    5: [
+      { name: 'CHILDHOOD AND WOMAN HEALTH', number: '506524', code: '17253', modules: ['Childhood neuropsychiatry', 'General pediatrics', 'Gynaecology and obstetrics', 'Pediatric surgery'] },
+      { name: 'CLINICAL PHARMACOLOGY, GENETICS AND PATHOLOGY', number: '510124', code: '19930', modules: ['Clinical pharmacology and therapeutics', 'Medical genetics', 'Medical toxicology', 'Pathological Anatomy'] },
+      { name: 'GENERAL SURGERY I', number: '506555', code: '18492', modules: ['Emergency surgery', 'Intensive care', 'General surgery', 'Surgical emergency'] },
+      { name: 'GENERAL SURGERY II', number: '506540', code: '17795', modules: ['Module', 'Module 2'] },
+      // Add courses for 5th year
+    ],
+    6: [
+      { name: 'CLINICAL MEDICINE', number: '501911', code: '11777', modules: ['Family medicine', 'FOrensic medicine', 'Geriatrics', 'Internal medicine', 'occupational medicine'] },
+      { name: 'PUBLIC MEDICINE', number: '510070', code: '19924', modules: ['Module 1', 'Module 2'] },
+      // Add courses for 6th year
+    ],
+  };
+
+ coursesByYear[selectedYear].forEach(course => {
+    const option = document.createElement("option");
+    option.value = JSON.stringify(course);
+    option.text = course.name;
+    selectCourse.add(option);
+  });
+}
+
+function resetForm() {
+  // Reset "Select Year" dropdown to default
+  document.getElementById("selectYear").value = "default";
+
+  // Reset "Select Course" dropdown to default
+  document.getElementById("selectCourse").value = "default";
+
+  // Reset "Exam Sitting" dropdown to default
+  document.getElementById("examSitting").value = "1st"; // Set the desired default exam sitting
+
+  // Reset "Select Exam Year" dropdown to default
+  document.getElementById("selectExamYear").value = "default";
+
+  // Reset other form elements and hide any displayed elements if needed
+
+  // Reset course details display
+  hideCourseDetails();
+
+  // Reset exam details display
+  document.getElementById("examDetails").style.display = "none";
+}
+
+function showCourseDetails() {
+  const selectedCourse = document.getElementById("selectCourse").value;
+
+  if (selectedCourse !== 'default') {
+    const courseDetails = JSON.parse(selectedCourse);
+    const courseDetailsText = `Course Name: ${courseDetails.name}\n Course number: ${courseDetails.number}\n Modules in the course: ${courseDetails.modules.join(', ')}`;
+    document.getElementById("courseDetailsText").innerText = courseDetailsText;
+    document.getElementById("courseDetails").style.display = "block";
+  }
+}
+
+function hideCourseDetails() {
+  document.getElementById("courseDetails").style.display = "none";
+
+}
+
+function findExams() {
+  const selectedCourse = document.getElementById("selectCourse").value;
+  const selectedExamSitting = document.getElementById("examSitting").value;
+
+  if (selectedCourse !== 'default') {
+    const courseDetails = JSON.parse(selectedCourse);
+
+    const examDetailsTable = document.getElementById("examDetailsTable");
+    examDetailsTable.innerHTML = ''; // Clear existing table
+
+    // Create table header
+    const tableHeader = examDetailsTable.createTHead();
+    const headerRow = tableHeader.insertRow();
+    const headerCells = ['Course', 'Module', 'Date and Time', 'Registration Period', 'Exam Type'];
+
+    headerCells.forEach(cellText => {
+      const headerCell = document.createElement("th");
+      const textNode = document.createTextNode(cellText);
+      headerCell.appendChild(textNode);
+      headerRow.appendChild(headerCell);
+    });
+
+    // Create table body
+    const tableBody = examDetailsTable.createTBody();
+
+    // Populate table rows with dummy data (replace with actual logic)
+    const dummyExamData = [
+      { course: 'BASIC SCIENCE', module: 'Module 1', dateTime: '2023-01-15 09:00', regPeriod: '2022-12-01 - 2023-01-10', examType: 'Regular' },
+      { course: 'BASIC SCIENCE', module: 'Module 2', dateTime: '2023-01-16 10:30', regPeriod: '2022-12-01 - 2023-01-10', examType: 'Regular' }
+      // Add more exam data based on your actual logic
+    ];
+
+    dummyExamData.forEach(exam => {
+      const row = tableBody.insertRow();
+      const cells = [exam.course, exam.module, exam.dateTime, exam.regPeriod, exam.examType];
+
+      cells.forEach(cellText => {
+        const cell = row.insertCell();
+        const textNode = document.createTextNode(cellText);
+        cell.appendChild(textNode);
+      });
+    });
+
+    // Display the table
+    document.getElementById("examDetails").style.display = "block";
+  }
+}
+ window.onload = function(){
+        // initialize the table
+        $('#exams').DataTable( {
+        // data: data,
+        ordering: false,
+        searching: false,
+        select: true,
+        "dom": 'rtp',
+        // ucomment for info tooptip if ui make it 'rtip'
+        // dom: 'rtip',
+        
+        // ucomment for "scroll" instead of page number buttons e.g.  1...5
+         paging: false,
+         scrollY: '300px',
+         scrollCollapse: true,
+        columns: [
+            {title: 'Activity', data: 'Activity' },
+            {title: 'Roll', data: 'Roll' },
+            {title: 'Registration Period' , data: 'Registration_Period' },
+            {title: 'Exam Period' , data: 'Exam_Period' },
+            {title: 'Type' , data: 'Type' }
+        ]
+    } );
+      }
+
+
+      async function loadTable() {
+    let baseurl = 'https://paviamed-young-morning-6857.fly.dev/'
+    let params_c = collect_params()
+    let url = baseurl+params_c
+
+    fetch(url)
+    .then(res => res.json())
+    .then(data => {
+    console.log(data)
+    ddd = data
+    if (Object.keys(data).includes('0')) {
+      Object.keys(data).forEach(key => {data[key].Registration_Period = data[key].Registration_Period.replace('-', ' -')}) 
+  } else if (Object.keys(data).includes('Registration_Period')) {
+      data.Registration_Period = data.Registration_Period.replace('-', ' -') 
+  }
+  
+  $('#exams').DataTable().clear().rows.add(data).draw();
+  window.dispatchEvent(new Event('resize'));
+    })
+
+}
+var ddd = ''
+function collect_params() {
+	let semester_ranges = [['01-01', '02-31'],['06-01','06-30'],['07-01','07-30'],['09-01','09-30'],['11-15','12-30']]
+	
+	let selectionidx = document.getElementById('examSitting').selectedIndex
+	let year = $("#selectSittingYear option:selected").text();
+    // fix date and time,  needs to be in  dd/mm/yyyy
+   //let start_date = $('#startDate')[0].value
+    //let end_date = $('#endDate')[0].value
+	let start_date = year+'-'+semester_ranges[selectedIndex][0]
+	let end_date = year+'-'+semester_ranges[selectedIndex][1]
+    // should use a proper library for format conversions, quick hack to just get it working
+    start_date = start_date.slice(8)+'%2F'+start_date.slice(5,7)+'%2F'+start_date.slice(0,4) 
+    end_date = end_date.slice(8)+'%2F'+end_date.slice(5,7)+'%2F'+end_date.slice(0,4) 
+
+    return `data_da=${start_date}&data_a=${end_date}&fac_id=10006&cds_id=10046&ad_id=${$('#activity')[0].value}&docente_id=&TIPO_FORM=1&form_id_formRicercaCds=formRicercaCds&btnSubmit=Avvia+Ricerca`;
+
+}
